@@ -1,4 +1,4 @@
-### Boilerplates
+# Boilerplates
 
 Useful coding templates for various situations:
 - A basic blank HTML page (I use this for testing out CSS stuff)
