@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Canvas</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <style>
+        #canvas { border: 1px solid black; }
+    </style>
+    <body>
+        <canvas id="canvas" width="500" height="500"></canvas>
+        <div id="mouse"></div>
+        <div id="fps"></div>
+        <div id="debug"></div>
+        <script>
+            // ===== Setup =====
+
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+            const mouse = { x: 0, y: 0, btn: -1 };
+
+            // ===== Handle mouse events =====
+
+            canvas.addEventListener("mousemove", e => {
+                var rect = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            canvas.addEventListener("contextmenu", e => e.preventDefault());
+            canvas.addEventListener("mousedown", e => { mouse.btn = e.button; });
+            canvas.addEventListener("mouseup", e => { mouse.btn = -1; });
+
+            // ===== Render loop =====
+
+            var prevFrameTime = 0;
+            function animate(now) {
+                var deltaTime = document.hasFocus() ? now / 1000 - prevFrameTime : 1/60;
+                prevFrameTime = now / 1000;
+                document.getElementById("mouse").innerHTML = `[x: ${mouse.x}, y: ${mouse.y}, btn: ${mouse.btn}]`;
+                document.getElementById("fps").innerHTML = `[FPS: ${Math.round(1 / deltaTime)}]`;
+                // document.getElementById("debug").innerHTML = `[Debug: ${0}]`;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = "#000";
+                ctx.strokeStyle = "#f00";
+
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(100, 200);
+                ctx.lineTo(300, 300);
+                ctx.closePath();
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.ellipse(300, 400, 20, 20, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                requestAnimationFrame(animate);
+            }
+            requestAnimationFrame(animate);
+        </script>
+    </body>
+</html>
